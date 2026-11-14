@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 차량 상태 읽기 (Pleos Vehicle Service, protectionLevel=normal) -->
+    <uses-permission android:name="pleos.car.permission.CAR_SEATS" />
+    <uses-permission android:name="pleos.car.permission.CAR_SAFETY" />
+    <uses-permission android:name="pleos.car.permission.CAR_DOORS" />
+    <uses-permission android:name="pleos.car.permission.CAR_WINDOWS" />
+    <uses-permission android:name="pleos.car.permission.CAR_CLIMATE" />
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />
+    <uses-permission android:name="pleos.car.permission.CAR_MILEAGE" />
+    <uses-permission android:name="pleos.car.permission.CAR_ENERGY" />
+    <uses-permission android:name="pleos.car.permission.CAR_POWERTRAIN" />
+    <uses-permission android:name="pleos.car.permission.CAR_SPEED" />
+    <uses-permission android:name="pleos.car.permission.CAR_INFO" />
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />
+
+    <!-- Pleos 길 안내(NaviHelper): 현재 위치·목적지·경유지 추가·도착 이벤트. 보호 수준 Normal -->
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE" />
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE_SEARCH" />
+
+    <!-- 차량 제어 (창문 잠금, 공조, 실내등) -->
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_SEATS" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_WINDOWS" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_CLIMATE" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_LIGHTS" />
+
+    <!-- 외부 데이터(휴게소·날씨) 조회 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+        위치 권한은 넣지 않는다. Pleos 에뮬레이터 실험(2026-11-12): 위치·마이크처럼 사용자에게 허용을 받는 권한을
+        허용하면 distractionOptimized를 선언해도 주행 중 앱 전체가 차단된다(선언만 하고 허용 전에는 차단되지 않음).
+        실제 위치는 Pleos 내비(NaviHelper) 연동으로 받는다 → 주최 측 문의 항목. 그 전에는 시연용 위치를 쓴다.
+    -->
+
+
+    <!--
+        RECORD_AUDIO는 선언하지 않는다. Pleos에서는 이 권한이 있으면 주행 중 앱 전체가 차단된다(에뮬레이터 확인).
+        마이크 버튼은 기기의 음성 인식 화면을 띄워 결과만 받는다. 아래는 그 화면을 찾기 위한 패키지 가시성 선언.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RideMate">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.RideMate">
+            <!-- 주행 중에도 쓰는 화면(벨트 경보·주행 기본)이 있어서 주행 방해 최적화 앱으로 선언 -->
+            <meta-data
+                android:name="distractionOptimized"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
